@@ -6,9 +6,15 @@ from typing import Optional, List, Dict, Tuple, Any
 
 import pandas as pd
 import streamlit as st
-from google.oauth2.service_account import Credentials
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+
+try:
+    from google.oauth2.service_account import Credentials
+    from googleapiclient.discovery import build
+    from googleapiclient.errors import HttpError
+except Exception as e:
+    st.set_page_config(page_title="Yvora | Fichas Técnicas", layout="wide")
+    st.error(f"Falha ao carregar dependências Google: {type(e).__name__}: {e}")
+    st.stop()
 
 
 st.set_page_config(
