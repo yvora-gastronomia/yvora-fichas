@@ -2,7 +2,7 @@ import os
 import re
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import pandas as pd
 import streamlit as st
@@ -17,19 +17,32 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+APP_TITLE = "YVORA | Fichas Técnicas"
+BRAND_BG = "#EFE7DD"
+BRAND_BLUE = "#0E2A47"
+BRAND_BORDER = "rgba(14,42,71,0.14)"
+DEFAULT_SHEET_ID = "1bJVOGJW1zZSN3J64vHT89Dm_GW2ExdmdTtKvQnH7ndw"
+DEFAULT_USERS_TAB = "users"
+DEFAULT_ITEMS_TAB = "items"
+
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
 ]
 
-DEFAULT_SHEET_ID = "1bJVOGJW1zZSN3J64vHT89Dm_GW2ExdmdTtKvQnH7ndw"
-DEFAULT_USERS_TAB = "users"
-DEFAULT_ITEMS_TAB = "items"
-
 LOGO_CANDIDATES = [
-    "Yvora_logo.png", "Yvora_logo.jpg", "Yvora_logo.jpeg", "Yvora_logo.webp",
-    "yvora_logo.png", "yvora_logo.jpg", "yvora_logo.jpeg", "yvora_logo.webp",
-    "YVORA_logo.png", "YVORA_logo.jpg", "YVORA_logo.jpeg", "YVORA_logo.webp",
+    "yvora_logo.JPG",
+    "Yvora_logo.JPG",
+    "YVORA_logo.JPG",
+    "yvora_logo.jpg",
+    "Yvora_logo.jpg",
+    "YVORA_logo.jpg",
+    "yvora_logo.png",
+    "Yvora_logo.png",
+    "YVORA_logo.png",
+    "logo.png",
+    "logo.jpg",
+    "logo.JPG",
 ]
 
 ROLE_LABEL = {
@@ -51,40 +64,78 @@ PRIMARY_SERVICE_PRIORITY = [
     "service_common_mistakes",
 ]
 
-SECONDARY_GENERAL_COLS = [
-    "concept", "strategy", "tags", "cover_photo_url", "training_video_url"
-]
 
-st.markdown(
-    """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap');
-html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
-.stApp { background-color: #EFE7DD; }
-.block-container { max-width: 1180px; padding-top: .75rem; padding-bottom: 2rem; }
-.title-bar { background:#0E2A47; color:white; padding:16px 20px; border-radius:0 0 18px 18px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; }
-.title-bar h1 { font-size:24px; margin:0; font-family:'DM Serif Display', serif; }
-.badge { background:rgba(255,255,255,.15); padding:8px 14px; border-radius:999px; font-size:14px; }
-.card { background:white; border-radius:18px; padding:18px; margin-bottom:14px; box-shadow:0 6px 20px rgba(0,0,0,.06); }
-.quick-card { background:#fff; border-radius:18px; padding:18px; margin-bottom:14px; box-shadow:0 6px 20px rgba(0,0,0,.06); border-left:8px solid #0E2A47; }
-.quick-card h3 { margin-top:0; margin-bottom:10px; color:#0E2A47; font-size:18px; }
-.quick-text { font-size:17px; line-height:1.45; white-space:pre-wrap; }
-.meta-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; margin-top:12px; }
-.meta-box { background:#F5EFE7; border-radius:14px; padding:12px; }
-.meta-label { color:rgba(0,0,0,.55); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
-.meta-value { font-size:18px; font-weight:700; color:#0E2A47; margin-top:4px; }
-.area-title { font-size:18px; font-weight:700; margin:0 0 8px 0; color:#0E2A47; }
-.item-title { font-size:30px; font-weight:800; margin:0; color:#0E2A47; }
-.item-subtitle { font-size:15px; color:rgba(0,0,0,.62); margin-top:4px; }
-.stButton > button { border-radius:14px; font-size:16px; padding:12px; }
-.stButton > button[kind="primary"] { background-color:#0E2A47; }
-.small-btn > button { padding:8px 10px !important; font-size:14px !important; border-radius:12px !important; }
-hr { border:none; border-top:1px solid rgba(0,0,0,.08); margin:10px 0; }
-@media (max-width: 760px) { .meta-grid { grid-template-columns:1fr; } .item-title { font-size:24px; } .quick-text { font-size:16px; } }
-</style>
-""",
-    unsafe_allow_html=True,
-)
+def inject_css() -> None:
+    st.markdown(
+        f"""
+        <style>
+        html, body, [class*="css"] {{
+            background: {BRAND_BG} !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+        }}
+        .stApp {{ background: {BRAND_BG}; }}
+        .main .block-container {{ padding-top: .7rem; padding-bottom: 4rem; max-width: 980px; }}
+        h1, h2, h3 {{ color: {BRAND_BLUE} !important; font-weight: 850 !important; letter-spacing: -0.02em; }}
+        .yv-header {{
+            background: rgba(255,255,255,0.55);
+            border: 1px solid {BRAND_BORDER};
+            border-radius: 22px;
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }}
+        .yv-logo {{ width: 96px; max-height: 64px; object-fit: contain; border-radius: 12px; }}
+        .yv-title {{ color: {BRAND_BLUE}; font-size: 24px; font-weight: 900; line-height: 1.1; }}
+        .yv-subtitle {{ color: rgba(14,42,71,.68); font-size: 13px; margin-top: 4px; }}
+        .yv-user {{ margin-left: auto; text-align: right; color: rgba(14,42,71,.75); font-size: 12px; }}
+        .yv-card {{
+            background: rgba(255,255,255,0.62);
+            border: 1px solid {BRAND_BORDER};
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 6px 18px rgba(14,42,71,.04);
+        }}
+        .yv-critical {{
+            background: rgba(255,255,255,0.76);
+            border: 1px solid {BRAND_BORDER};
+            border-left: 8px solid {BRAND_BLUE};
+            border-radius: 18px;
+            padding: 14px 15px;
+            margin-bottom: 12px;
+        }}
+        .yv-critical h3 {{ font-size: 16px; margin: 0 0 8px 0; color: {BRAND_BLUE}; }}
+        .yv-text {{ color: rgba(0,0,0,.82); font-size: 16px; line-height: 1.45; white-space: pre-wrap; }}
+        .yv-item-title {{ color: {BRAND_BLUE}; font-size: 28px; font-weight: 900; line-height: 1.08; margin-bottom: 4px; }}
+        .yv-item-meta {{ color: rgba(14,42,71,.68); font-size: 13px; }}
+        .kpi-grid {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }}
+        .kpi {{ background: rgba(255,255,255,.58); border: 1px solid {BRAND_BORDER}; border-radius: 16px; padding: 11px 12px; }}
+        .kpi-label {{ color: rgba(14,42,71,.62); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
+        .kpi-value {{ color: {BRAND_BLUE}; font-size: 17px; font-weight: 900; margin-top: 4px; }}
+        .pill {{ display:inline-block; padding: 6px 11px; border-radius: 999px; font-size: 12px; font-weight: 850; border: 1px solid {BRAND_BORDER}; background: rgba(255,255,255,.68); color: {BRAND_BLUE}; margin: 4px 4px 0 0; }}
+        .area-title {{ font-size: 15px; font-weight: 900; color: {BRAND_BLUE}; margin-bottom: 7px; }}
+        .stButton > button {{ border-radius: 16px !important; min-height: 2.8rem !important; font-weight: 800 !important; }}
+        .stTextInput input, .stTextArea textarea {{ border-radius: 14px !important; }}
+        div[data-baseweb="select"] > div {{ border-radius: 14px !important; }}
+        @media (max-width: 760px) {{
+            .main .block-container {{ padding-left: .8rem; padding-right: .8rem; max-width: 100%; }}
+            .yv-header {{ align-items: flex-start; }}
+            .yv-logo {{ width: 74px; }}
+            .yv-title {{ font-size: 19px; }}
+            .yv-user {{ display: none; }}
+            .kpi-grid {{ grid-template-columns: 1fr; }}
+            .yv-item-title {{ font-size: 23px; }}
+            .yv-text {{ font-size: 15px; }}
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+inject_css()
 
 
 def _get_cfg(name: str, default: str = "") -> str:
@@ -148,13 +199,12 @@ def open_sheet():
     return open_sheet_cached(get_sheet_id())
 
 
-def list_tabs() -> List[str]:
-    sh = open_sheet()
-    return [ws.title for ws in retryable(lambda: sh.worksheets())]
-
-
 def worksheet(tab: str):
     return retryable(lambda: open_sheet().worksheet(tab))
+
+
+def list_tabs() -> List[str]:
+    return [ws.title for ws in retryable(lambda: open_sheet().worksheets())]
 
 
 def read_all_values(tab: str) -> List[List[str]]:
@@ -229,8 +279,16 @@ def delete_item_row(tab: str, item_id: str):
     clear_data_cache()
 
 
+def safe_str(x: Any) -> str:
+    if x is None:
+        return ""
+    if isinstance(x, float) and pd.isna(x):
+        return ""
+    return str(x).strip()
+
+
 def as_bool(v: Any) -> bool:
-    return str(v).strip().lower() in {"1", "true", "sim", "yes", "y", "s", "ativo"}
+    return safe_str(v).lower() in {"1", "true", "sim", "yes", "y", "s", "ativo"}
 
 
 def is_admin() -> bool:
@@ -247,7 +305,7 @@ def has_access(module_type: str) -> bool:
         return False
     if auth.get("role") == "admin":
         return True
-    module_type = str(module_type).strip().lower()
+    module_type = safe_str(module_type).lower()
     if module_type == "drink":
         return as_bool(auth.get("can_drinks"))
     return as_bool(auth.get("can_pratos"))
@@ -288,12 +346,24 @@ def next_id(items: pd.DataFrame, prefix: str) -> str:
 
 
 def prettify_label(col: str) -> str:
+    mapping = {
+        "service_ingredients": "Ingredientes / insumos",
+        "service_mise_en_place": "Mise en place",
+        "service_steps": "Passo a passo",
+        "service_plating": "Montagem / finalização",
+        "service_quality_check": "Ponto de qualidade",
+        "service_common_mistakes": "Erros comuns / atenção",
+        "service_details": "Detalhes de serviço",
+        "training_steps": "Treinamento",
+    }
+    if col in mapping:
+        return mapping[col]
     s = str(col).replace("_", " ").strip()
     return s[:1].upper() + s[1:] if s else col
 
 
 def item_value(item: Dict[str, str], key: str) -> str:
-    return str(item.get(key, "")).strip()
+    return safe_str(item.get(key, ""))
 
 
 def get_mode_cols(all_cols: List[str], prefix: str) -> List[str]:
@@ -310,6 +380,21 @@ def get_mode_cols(all_cols: List[str], prefix: str) -> List[str]:
     ordered = [p for p in priority if p in pref]
     ordered += [c for c in sorted(pref) if c not in ordered]
     return ordered
+
+
+def find_logo_path() -> Optional[str]:
+    base = Path(__file__).parent
+    for name in LOGO_CANDIDATES:
+        p = base / name
+        if p.exists():
+            return str(p)
+    assets = base / "assets"
+    if assets.exists():
+        for name in LOGO_CANDIDATES:
+            p = assets / name
+            if p.exists():
+                return str(p)
+    return None
 
 
 def extract_drive_file_id(url: str) -> Optional[str]:
@@ -382,21 +467,30 @@ def header():
     if auth:
         role = auth.get("role", "")
         user_text = f"{ROLE_LABEL.get(role, role)} | {auth.get('username', '')}"
-    st.markdown(f"""<div class="title-bar"><h1>Yvora · Fichas Técnicas</h1><div class="badge">{user_text}</div></div>""", unsafe_allow_html=True)
-    if auth:
-        _, _, col3 = st.columns([2, 2, 2])
-        with col3:
-            st.markdown('<div class="small-btn">', unsafe_allow_html=True)
+    logo = find_logo_path()
+    logo_html = ""
+    if logo:
+        st.markdown("", unsafe_allow_html=True)
+    st.markdown("<div class='yv-header'>", unsafe_allow_html=True)
+    c1, c2, c3 = st.columns([1.05, 3.7, 1.3])
+    with c1:
+        if logo:
+            st.image(logo, use_container_width=True)
+    with c2:
+        st.markdown(f"<div class='yv-title'>{APP_TITLE}</div><div class='yv-subtitle'>Consulta rápida para cozinha e bar</div>", unsafe_allow_html=True)
+    with c3:
+        st.markdown(f"<div class='yv-user'>{user_text}</div>", unsafe_allow_html=True)
+        if auth:
             if st.button("Trocar usuário", use_container_width=True):
                 logout()
                 st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def login(users: pd.DataFrame):
     validate_users_df(users)
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.subheader("Login")
+    st.markdown("<div class='yv-card'>", unsafe_allow_html=True)
+    st.subheader("Acesso")
     with st.form("login_form", clear_on_submit=False):
         u = st.text_input("Usuário")
         p = st.text_input("Senha", type="password")
@@ -428,7 +522,7 @@ def login(users: pd.DataFrame):
 
 def quick_card(title: str, value: str):
     if value:
-        st.markdown(f"<div class='quick-card'><h3>{title}</h3><div class='quick-text'>{value}</div></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='yv-critical'><h3>{title}</h3><div class='yv-text'>{value}</div></div>", unsafe_allow_html=True)
 
 
 def render_operational_summary(item: Dict[str, str], all_cols: List[str]):
@@ -440,24 +534,24 @@ def render_operational_summary(item: Dict[str, str], all_cols: List[str]):
     rendimento = item_value(item, "yield")
     tags = item_value(item, "tags")
 
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.markdown(f"<div class='item-title'>{title}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='item-subtitle'>{tipo_label}{' · ' + category if category else ''}</div>", unsafe_allow_html=True)
+    st.markdown("<div class='yv-card'>", unsafe_allow_html=True)
+    st.markdown(f"<div class='yv-item-title'>{title}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='yv-item-meta'>{tipo_label}{' · ' + category if category else ''}</div>", unsafe_allow_html=True)
     st.markdown(
         f"""
-        <div class='meta-grid'>
-          <div class='meta-box'><div class='meta-label'>Tempo</div><div class='meta-value'>{tempo or '-'}</div></div>
-          <div class='meta-box'><div class='meta-label'>Rendimento</div><div class='meta-value'>{rendimento or '-'}</div></div>
-          <div class='meta-box'><div class='meta-label'>Categoria</div><div class='meta-value'>{category or '-'}</div></div>
+        <div class='kpi-grid'>
+          <div class='kpi'><div class='kpi-label'>Tempo</div><div class='kpi-value'>{tempo or '-'}</div></div>
+          <div class='kpi'><div class='kpi-label'>Rendimento</div><div class='kpi-value'>{rendimento or '-'}</div></div>
+          <div class='kpi'><div class='kpi-label'>Categoria</div><div class='kpi-value'>{category or '-'}</div></div>
         </div>
         """,
         unsafe_allow_html=True,
     )
     if tags:
-        st.caption(tags)
+        st.markdown("".join([f"<span class='pill'>{x.strip()}</span>" for x in tags.replace(";", ",").split(",") if x.strip()]), unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-    col_main, col_side = st.columns([1.6, 1])
+    col_main, col_side = st.columns([1.7, 1])
     with col_main:
         quick_card("Ingredientes / insumos", item_value(item, "service_ingredients"))
         quick_card("Mise en place", item_value(item, "service_mise_en_place"))
@@ -514,13 +608,11 @@ def admin_or_editor_form(item: Dict[str, str], all_cols: List[str], items_tab: s
                         edited[c] = st.text_area(prettify_label(c), value=item_value(item, c), height=100)
                     else:
                         edited[c] = st.text_input(prettify_label(c), value=item_value(item, c))
-            service_cols = get_mode_cols(all_cols, "service_")
-            training_cols = get_mode_cols(all_cols, "training_")
             st.markdown("### Serviço")
-            for c in service_cols:
+            for c in get_mode_cols(all_cols, "service_"):
                 edited[c] = st.text_area(prettify_label(c), value=item_value(item, c), height=120)
             st.markdown("### Treinamento")
-            for c in training_cols:
+            for c in get_mode_cols(all_cols, "training_"):
                 edited[c] = st.text_area(prettify_label(c), value=item_value(item, c), height=120)
             c1, c2 = st.columns([2, 1])
             save = c1.form_submit_button("Salvar", type="primary", use_container_width=True)
@@ -600,22 +692,19 @@ def select_item_screen(items: pd.DataFrame, items_tab: str):
         st.warning("Seu usuário não possui acesso às fichas cadastradas.")
         return
 
-    has_pratos = any(available["type"] == "prato")
-    has_drinks = any(available["type"] == "drink")
     area_options = []
-    if has_pratos:
+    if any(available["type"] == "prato"):
         area_options.append("Pratos")
-    if has_drinks:
+    if any(available["type"] == "drink"):
         area_options.append("Drinks")
     if not area_options:
         area_options = ["Todos"]
 
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.markdown("<div class='yv-card'>", unsafe_allow_html=True)
     st.markdown("<div class='area-title'>1. Escolha a área de produção</div>", unsafe_allow_html=True)
     area = st.radio("Área", area_options, horizontal=True, label_visibility="collapsed", key="area_tipo")
     st.markdown("<hr/>", unsafe_allow_html=True)
     st.markdown("<div class='area-title'>2. Escolha a ficha</div>", unsafe_allow_html=True)
-    c1, c2 = st.columns([1.4, 2])
 
     filtered = available.copy()
     if area == "Pratos":
@@ -623,6 +712,7 @@ def select_item_screen(items: pd.DataFrame, items_tab: str):
     elif area == "Drinks":
         filtered = filtered[filtered["type"] == "drink"]
 
+    c1, c2 = st.columns([1.4, 2])
     with c2:
         busca = st.text_input("Buscar", placeholder="Digite nome, categoria, tag ou ID", key="busca_item")
     if busca:
@@ -641,9 +731,9 @@ def select_item_screen(items: pd.DataFrame, items_tab: str):
     labels = []
     id_by_label = {}
     for _, row in filtered.iterrows():
-        name = str(row.get("name", "")).strip() or "Sem nome"
-        item_id = str(row.get("id", "")).strip()
-        category = str(row.get("category", "")).strip()
+        name = safe_str(row.get("name", "")) or "Sem nome"
+        item_id = safe_str(row.get("id", ""))
+        category = safe_str(row.get("category", ""))
         extra = " · ".join([x for x in [category, item_id] if x])
         label = f"{name} ({extra})" if extra else name
         labels.append(label)
@@ -698,16 +788,14 @@ def diagnostics_panel():
 
 def main():
     header()
-    users_tab = get_users_tab()
-    items_tab = get_items_tab()
     try:
-        users = read_df_cached(users_tab)
+        users = read_df_cached(get_users_tab())
         if "auth" not in st.session_state:
             login(users)
             diagnostics_panel()
             st.stop()
-        items = read_df_cached(items_tab)
-        select_item_screen(items, items_tab)
+        items = read_df_cached(get_items_tab())
+        select_item_screen(items, get_items_tab())
         diagnostics_panel()
     except Exception as e:
         st.error("Falha ao carregar o app.")
