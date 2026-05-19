@@ -31,37 +31,18 @@ SCOPES = [
 ]
 
 LOGO_CANDIDATES = [
-    "yvora_logo.JPG",
-    "Yvora_logo.JPG",
-    "YVORA_logo.JPG",
-    "yvora_logo.jpg",
-    "Yvora_logo.jpg",
-    "YVORA_logo.jpg",
-    "yvora_logo.png",
-    "Yvora_logo.png",
-    "YVORA_logo.png",
-    "logo.png",
-    "logo.jpg",
-    "logo.JPG",
+    "yvora_logo.JPG", "Yvora_logo.JPG", "YVORA_logo.JPG",
+    "yvora_logo.jpg", "Yvora_logo.jpg", "YVORA_logo.jpg",
+    "yvora_logo.png", "Yvora_logo.png", "YVORA_logo.png",
+    "logo.png", "logo.jpg", "logo.JPG",
 ]
 
-ROLE_LABEL = {
-    "viewer": "Cozinha",
-    "editor": "Chefe",
-    "admin": "Administrador",
-}
-
+ROLE_LABEL = {"viewer": "Cozinha", "editor": "Chefe", "admin": "Administrador"}
 REQUIRED_USER_COLS = ["username", "password", "role", "active", "can_drinks", "can_pratos"]
 BASE_ITEM_COLS = ["id", "type", "name"]
-
 PRIMARY_SERVICE_PRIORITY = [
-    "service_ingredients",
-    "service_mise_en_place",
-    "service_steps",
-    "service_plating",
-    "service_details",
-    "service_quality_check",
-    "service_common_mistakes",
+    "service_ingredients", "service_mise_en_place", "service_steps", "service_plating",
+    "service_details", "service_quality_check", "service_common_mistakes",
 ]
 
 
@@ -69,45 +50,20 @@ def inject_css() -> None:
     st.markdown(
         f"""
         <style>
-        html, body, [class*="css"] {{
-            background: {BRAND_BG} !important;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
-        }}
+        html, body, [class*="css"] {{ background: {BRAND_BG} !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important; }}
         .stApp {{ background: {BRAND_BG}; }}
         .main .block-container {{ padding-top: .7rem; padding-bottom: 4rem; max-width: 980px; }}
         h1, h2, h3 {{ color: {BRAND_BLUE} !important; font-weight: 850 !important; letter-spacing: -0.02em; }}
-        .yv-header {{
-            background: rgba(255,255,255,0.55);
-            border: 1px solid {BRAND_BORDER};
-            border-radius: 22px;
-            padding: 14px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }}
-        .yv-logo {{ width: 96px; max-height: 64px; object-fit: contain; border-radius: 12px; }}
+        .yv-header {{ background: rgba(255,255,255,0.55); border: 1px solid {BRAND_BORDER}; border-radius: 22px; padding: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 14px; }}
         .yv-title {{ color: {BRAND_BLUE}; font-size: 24px; font-weight: 900; line-height: 1.1; }}
         .yv-subtitle {{ color: rgba(14,42,71,.68); font-size: 13px; margin-top: 4px; }}
         .yv-user {{ margin-left: auto; text-align: right; color: rgba(14,42,71,.75); font-size: 12px; }}
-        .yv-card {{
-            background: rgba(255,255,255,0.62);
-            border: 1px solid {BRAND_BORDER};
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 6px 18px rgba(14,42,71,.04);
-        }}
-        .yv-critical {{
-            background: rgba(255,255,255,0.76);
-            border: 1px solid {BRAND_BORDER};
-            border-left: 8px solid {BRAND_BLUE};
-            border-radius: 18px;
-            padding: 14px 15px;
-            margin-bottom: 12px;
-        }}
+        .yv-card {{ background: rgba(255,255,255,0.62); border: 1px solid {BRAND_BORDER}; border-radius: 20px; padding: 15px; margin-bottom: 12px; box-shadow: 0 6px 18px rgba(14,42,71,.04); }}
+        .yv-critical {{ background: rgba(255,255,255,0.76); border: 1px solid {BRAND_BORDER}; border-left: 8px solid {BRAND_BLUE}; border-radius: 18px; padding: 14px 15px; margin-bottom: 12px; }}
         .yv-critical h3 {{ font-size: 16px; margin: 0 0 8px 0; color: {BRAND_BLUE}; }}
         .yv-text {{ color: rgba(0,0,0,.82); font-size: 16px; line-height: 1.45; white-space: pre-wrap; }}
+        .yv-list {{ margin: 0; padding-left: 1.15rem; color: rgba(0,0,0,.82); font-size: 16px; line-height: 1.45; }}
+        .yv-list li {{ margin-bottom: 5px; }}
         .yv-item-title {{ color: {BRAND_BLUE}; font-size: 28px; font-weight: 900; line-height: 1.08; margin-bottom: 4px; }}
         .yv-item-meta {{ color: rgba(14,42,71,.68); font-size: 13px; }}
         .kpi-grid {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }}
@@ -119,16 +75,7 @@ def inject_css() -> None:
         .stButton > button {{ border-radius: 16px !important; min-height: 2.8rem !important; font-weight: 800 !important; }}
         .stTextInput input, .stTextArea textarea {{ border-radius: 14px !important; }}
         div[data-baseweb="select"] > div {{ border-radius: 14px !important; }}
-        @media (max-width: 760px) {{
-            .main .block-container {{ padding-left: .8rem; padding-right: .8rem; max-width: 100%; }}
-            .yv-header {{ align-items: flex-start; }}
-            .yv-logo {{ width: 74px; }}
-            .yv-title {{ font-size: 19px; }}
-            .yv-user {{ display: none; }}
-            .kpi-grid {{ grid-template-columns: 1fr; }}
-            .yv-item-title {{ font-size: 23px; }}
-            .yv-text {{ font-size: 15px; }}
-        }}
+        @media (max-width: 760px) {{ .main .block-container {{ padding-left: .8rem; padding-right: .8rem; max-width: 100%; }} .yv-header {{ align-items: flex-start; }} .yv-title {{ font-size: 19px; }} .yv-user {{ display: none; }} .kpi-grid {{ grid-template-columns: 1fr; }} .yv-item-title {{ font-size: 23px; }} .yv-text, .yv-list {{ font-size: 15px; }} }}
         </style>
         """,
         unsafe_allow_html=True,
@@ -287,6 +234,35 @@ def safe_str(x: Any) -> str:
     return str(x).strip()
 
 
+def html_escape(text: str) -> str:
+    return safe_str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def split_items(text: str) -> List[str]:
+    value = safe_str(text)
+    if not value:
+        return []
+    if "\n" in value:
+        parts = [p.strip(" -•\t") for p in value.splitlines()]
+    else:
+        parts = [p.strip(" -•\t") for p in re.split(r";|,", value)]
+    return [p for p in parts if p]
+
+
+def should_render_as_list(text: str) -> bool:
+    parts = split_items(text)
+    if len(parts) < 2:
+        return False
+    return len(text) <= 700
+
+
+def render_value_html(value: str, as_list: bool = False) -> str:
+    if as_list and should_render_as_list(value):
+        lis = "".join([f"<li>{html_escape(p)}</li>" for p in split_items(value)])
+        return f"<ul class='yv-list'>{lis}</ul>"
+    return f"<div class='yv-text'>{html_escape(value)}</div>"
+
+
 def as_bool(v: Any) -> bool:
     return safe_str(v).lower() in {"1", "true", "sim", "yes", "y", "s", "ativo"}
 
@@ -368,15 +344,7 @@ def item_value(item: Dict[str, str], key: str) -> str:
 
 def get_mode_cols(all_cols: List[str], prefix: str) -> List[str]:
     pref = [c for c in all_cols if str(c).startswith(prefix)]
-    priority = [
-        f"{prefix}ingredients",
-        f"{prefix}steps",
-        f"{prefix}plating",
-        f"{prefix}mise_en_place",
-        f"{prefix}details",
-        f"{prefix}common_mistakes",
-        f"{prefix}quality_check",
-    ]
+    priority = [f"{prefix}ingredients", f"{prefix}steps", f"{prefix}plating", f"{prefix}mise_en_place", f"{prefix}details", f"{prefix}common_mistakes", f"{prefix}quality_check"]
     ordered = [p for p in priority if p in pref]
     ordered += [c for c in sorted(pref) if c not in ordered]
     return ordered
@@ -444,7 +412,6 @@ def render_image_or_media(item: Dict[str, str], all_cols: List[str]):
             st.image(thumb or raw, use_container_width=True)
         except Exception:
             st.caption("Imagem indisponível.")
-
     rawv = item_value(item, "training_video_url") if "training_video_url" in all_cols else ""
     if rawv:
         yt = extract_youtube_id(rawv)
@@ -468,9 +435,6 @@ def header():
         role = auth.get("role", "")
         user_text = f"{ROLE_LABEL.get(role, role)} | {auth.get('username', '')}"
     logo = find_logo_path()
-    logo_html = ""
-    if logo:
-        st.markdown("", unsafe_allow_html=True)
     st.markdown("<div class='yv-header'>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1.05, 3.7, 1.3])
     with c1:
@@ -509,20 +473,25 @@ def login(users: pd.DataFrame):
             st.error("Usuário ou senha inválidos, ou usuário inativo.")
         else:
             row = match.iloc[0]
-            st.session_state["auth"] = {
-                "username": str(row["username"]),
-                "role": str(row["role"]).strip().lower(),
-                "can_drinks": str(row["can_drinks"]),
-                "can_pratos": str(row["can_pratos"]),
-            }
+            st.session_state["auth"] = {"username": str(row["username"]), "role": str(row["role"]).strip().lower(), "can_drinks": str(row["can_drinks"]), "can_pratos": str(row["can_pratos"])}
             st.session_state.pop("item", None)
             st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
 
-def quick_card(title: str, value: str):
+def quick_card(title: str, value: str, as_list: bool = False):
     if value:
-        st.markdown(f"<div class='yv-critical'><h3>{title}</h3><div class='yv-text'>{value}</div></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='yv-critical'><h3>{title}</h3>{render_value_html(value, as_list=as_list)}</div>", unsafe_allow_html=True)
+
+
+def render_tags(tags: str):
+    pieces = split_items(tags)
+    short = [p for p in pieces if len(p) <= 24]
+    long = [p for p in pieces if len(p) > 24]
+    if short:
+        st.markdown("".join([f"<span class='pill'>{html_escape(x)}</span>" for x in short]), unsafe_allow_html=True)
+    if long:
+        st.caption(" · ".join(long))
 
 
 def render_operational_summary(item: Dict[str, str], all_cols: List[str]):
@@ -535,31 +504,28 @@ def render_operational_summary(item: Dict[str, str], all_cols: List[str]):
     tags = item_value(item, "tags")
 
     st.markdown("<div class='yv-card'>", unsafe_allow_html=True)
-    st.markdown(f"<div class='yv-item-title'>{title}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='yv-item-meta'>{tipo_label}{' · ' + category if category else ''}</div>", unsafe_allow_html=True)
-    st.markdown(
-        f"""
+    st.markdown(f"<div class='yv-item-title'>{html_escape(title)}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='yv-item-meta'>{html_escape(tipo_label)}{' · ' + html_escape(category) if category else ''}</div>", unsafe_allow_html=True)
+    st.markdown(f"""
         <div class='kpi-grid'>
-          <div class='kpi'><div class='kpi-label'>Tempo</div><div class='kpi-value'>{tempo or '-'}</div></div>
-          <div class='kpi'><div class='kpi-label'>Rendimento</div><div class='kpi-value'>{rendimento or '-'}</div></div>
-          <div class='kpi'><div class='kpi-label'>Categoria</div><div class='kpi-value'>{category or '-'}</div></div>
+          <div class='kpi'><div class='kpi-label'>Tempo</div><div class='kpi-value'>{html_escape(tempo) or '-'}</div></div>
+          <div class='kpi'><div class='kpi-label'>Rendimento</div><div class='kpi-value'>{html_escape(rendimento) or '-'}</div></div>
+          <div class='kpi'><div class='kpi-label'>Categoria</div><div class='kpi-value'>{html_escape(category) or '-'}</div></div>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+        """, unsafe_allow_html=True)
     if tags:
-        st.markdown("".join([f"<span class='pill'>{x.strip()}</span>" for x in tags.replace(";", ",").split(",") if x.strip()]), unsafe_allow_html=True)
+        render_tags(tags)
     st.markdown("</div>", unsafe_allow_html=True)
 
     col_main, col_side = st.columns([1.7, 1])
     with col_main:
-        quick_card("Ingredientes / insumos", item_value(item, "service_ingredients"))
-        quick_card("Mise en place", item_value(item, "service_mise_en_place"))
-        quick_card("Passo a passo", item_value(item, "service_steps"))
-        quick_card("Montagem / finalização", item_value(item, "service_plating"))
-        quick_card("Ponto de qualidade", item_value(item, "service_quality_check"))
-        quick_card("Erros comuns / atenção", item_value(item, "service_common_mistakes"))
-        quick_card("Detalhes de serviço", item_value(item, "service_details"))
+        quick_card("Ingredientes / insumos", item_value(item, "service_ingredients"), as_list=True)
+        quick_card("Mise en place", item_value(item, "service_mise_en_place"), as_list=False)
+        quick_card("Passo a passo", item_value(item, "service_steps"), as_list=False)
+        quick_card("Montagem / finalização", item_value(item, "service_plating"), as_list=False)
+        quick_card("Ponto de qualidade", item_value(item, "service_quality_check"), as_list=False)
+        quick_card("Erros comuns / atenção", item_value(item, "service_common_mistakes"), as_list=False)
+        quick_card("Detalhes de serviço", item_value(item, "service_details"), as_list=False)
     with col_side:
         render_image_or_media(item, all_cols)
 
@@ -575,7 +541,6 @@ def render_secondary_details(item: Dict[str, str], all_cols: List[str]):
         for c in extras:
             st.markdown(f"**{prettify_label(c)}**")
             st.write(item_value(item, c))
-
     training_cols = get_mode_cols(all_cols, "training_")
     if any(item_value(item, c) for c in training_cols):
         with st.expander("Treinamento", expanded=False):
@@ -691,7 +656,6 @@ def select_item_screen(items: pd.DataFrame, items_tab: str):
     if available.empty:
         st.warning("Seu usuário não possui acesso às fichas cadastradas.")
         return
-
     area_options = []
     if any(available["type"] == "prato"):
         area_options.append("Pratos")
@@ -699,19 +663,16 @@ def select_item_screen(items: pd.DataFrame, items_tab: str):
         area_options.append("Drinks")
     if not area_options:
         area_options = ["Todos"]
-
     st.markdown("<div class='yv-card'>", unsafe_allow_html=True)
     st.markdown("<div class='area-title'>1. Escolha a área de produção</div>", unsafe_allow_html=True)
     area = st.radio("Área", area_options, horizontal=True, label_visibility="collapsed", key="area_tipo")
     st.markdown("<hr/>", unsafe_allow_html=True)
     st.markdown("<div class='area-title'>2. Escolha a ficha</div>", unsafe_allow_html=True)
-
     filtered = available.copy()
     if area == "Pratos":
         filtered = filtered[filtered["type"] == "prato"]
     elif area == "Drinks":
         filtered = filtered[filtered["type"] == "drink"]
-
     c1, c2 = st.columns([1.4, 2])
     with c2:
         busca = st.text_input("Buscar", placeholder="Digite nome, categoria, tag ou ID", key="busca_item")
@@ -721,13 +682,11 @@ def select_item_screen(items: pd.DataFrame, items_tab: str):
             fields = [str(row.get("name", "")), str(row.get("category", "")), str(row.get("tags", "")), str(row.get("id", ""))]
             return b in " ".join(fields).lower()
         filtered = filtered[filtered.apply(row_matches, axis=1)]
-
     if filtered.empty:
         st.info("Nenhum item encontrado com os filtros atuais.")
         st.markdown("</div>", unsafe_allow_html=True)
         create_item_panel(items, items_tab)
         return
-
     labels = []
     id_by_label = {}
     for _, row in filtered.iterrows():
@@ -738,7 +697,6 @@ def select_item_screen(items: pd.DataFrame, items_tab: str):
         label = f"{name} ({extra})" if extra else name
         labels.append(label)
         id_by_label[label] = item_id
-
     current_id = st.session_state.get("item")
     default_index = 0
     if current_id:
@@ -751,7 +709,6 @@ def select_item_screen(items: pd.DataFrame, items_tab: str):
     selected_id = id_by_label[selected_label]
     st.session_state["item"] = selected_id
     st.markdown("</div>", unsafe_allow_html=True)
-
     selected = filtered[filtered["id"] == selected_id]
     if selected.empty:
         st.error("Item selecionado não encontrado.")
