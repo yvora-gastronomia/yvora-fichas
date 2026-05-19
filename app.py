@@ -484,16 +484,6 @@ def quick_card(title: str, value: str, as_list: bool = False):
         st.markdown(f"<div class='yv-critical'><h3>{title}</h3>{render_value_html(value, as_list=as_list)}</div>", unsafe_allow_html=True)
 
 
-def render_tags(tags: str):
-    pieces = split_items(tags)
-    short = [p for p in pieces if len(p) <= 24]
-    long = [p for p in pieces if len(p) > 24]
-    if short:
-        st.markdown("".join([f"<span class='pill'>{html_escape(x)}</span>" for x in short]), unsafe_allow_html=True)
-    if long:
-        st.caption(" · ".join(long))
-
-
 def render_operational_summary(item: Dict[str, str], all_cols: List[str]):
     title = item_value(item, "name") or "Item sem nome"
     category = item_value(item, "category")
@@ -501,7 +491,6 @@ def render_operational_summary(item: Dict[str, str], all_cols: List[str]):
     tipo_label = "Drink" if item_type == "drink" else "Prato"
     tempo = item_value(item, "total_time_min")
     rendimento = item_value(item, "yield")
-    tags = item_value(item, "tags")
 
     st.markdown("<div class='yv-card'>", unsafe_allow_html=True)
     st.markdown(f"<div class='yv-item-title'>{html_escape(title)}</div>", unsafe_allow_html=True)
@@ -513,8 +502,6 @@ def render_operational_summary(item: Dict[str, str], all_cols: List[str]):
           <div class='kpi'><div class='kpi-label'>Categoria</div><div class='kpi-value'>{html_escape(category) or '-'}</div></div>
         </div>
         """, unsafe_allow_html=True)
-    if tags:
-        render_tags(tags)
     st.markdown("</div>", unsafe_allow_html=True)
 
     col_main, col_side = st.columns([1.7, 1])
@@ -532,7 +519,7 @@ def render_operational_summary(item: Dict[str, str], all_cols: List[str]):
 
 def render_secondary_details(item: Dict[str, str], all_cols: List[str]):
     with st.expander("Informações complementares", expanded=False):
-        for c in ["concept", "strategy"]:
+        for c in ["concept", "strategy", "tags"]:
             if c in all_cols and item_value(item, c):
                 st.markdown(f"### {prettify_label(c)}")
                 st.write(item_value(item, c))
