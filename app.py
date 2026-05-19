@@ -18,9 +18,9 @@ st.set_page_config(
 )
 
 APP_TITLE = "YVORA | Fichas Técnicas"
-BRAND_BG = "#EFE7DD"
-BRAND_BLUE = "#0E2A47"
-BRAND_BORDER = "rgba(14,42,71,0.14)"
+BRAND_BG = "#FAF6EF"
+BRAND_BLUE = "#102A43"
+BRAND_BORDER = "rgba(110,78,46,0.18)"
 DEFAULT_SHEET_ID = "1bJVOGJW1zZSN3J64vHT89Dm_GW2ExdmdTtKvQnH7ndw"
 DEFAULT_USERS_TAB = "users"
 DEFAULT_ITEMS_TAB = "items"
@@ -51,28 +51,29 @@ def inject_css() -> None:
         f"""
         <style>
         html, body, [class*="css"] {{ background: {BRAND_BG} !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important; }}
-        .stApp {{ background: {BRAND_BG}; }}
+        .stApp {{ background: linear-gradient(180deg, #FAF6EF 0%, #F4E9D8 100%); }}
         .main .block-container {{ padding-top: .7rem; padding-bottom: 4rem; max-width: 980px; }}
         h1, h2, h3 {{ color: {BRAND_BLUE} !important; font-weight: 850 !important; letter-spacing: -0.02em; }}
-        .yv-header {{ background: rgba(255,255,255,0.55); border: 1px solid {BRAND_BORDER}; border-radius: 22px; padding: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 14px; }}
+        .yv-header {{ background: rgba(255,253,248,0.90); border: 1px solid {BRAND_BORDER}; border-top: 4px solid #C6A96A; border-radius: 22px; padding: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 14px; }}
         .yv-title {{ color: {BRAND_BLUE}; font-size: 24px; font-weight: 900; line-height: 1.1; }}
-        .yv-subtitle {{ color: rgba(14,42,71,.68); font-size: 13px; margin-top: 4px; }}
-        .yv-user {{ margin-left: auto; text-align: right; color: rgba(14,42,71,.75); font-size: 12px; }}
-        .yv-card {{ background: rgba(255,255,255,0.62); border: 1px solid {BRAND_BORDER}; border-radius: 20px; padding: 15px; margin-bottom: 12px; box-shadow: 0 6px 18px rgba(14,42,71,.04); }}
-        .yv-critical {{ background: rgba(255,255,255,0.76); border: 1px solid {BRAND_BORDER}; border-left: 8px solid {BRAND_BLUE}; border-radius: 18px; padding: 14px 15px; margin-bottom: 12px; }}
+        .yv-subtitle {{ color: rgba(110,78,46,.78); font-size: 13px; margin-top: 4px; }}
+        .yv-user {{ margin-left: auto; text-align: right; color: rgba(110,78,46,.78); font-size: 12px; }}
+        .yv-card {{ background: rgba(255,253,248,0.82); border: 1px solid {BRAND_BORDER}; border-radius: 20px; padding: 15px; margin-bottom: 12px; box-shadow: 0 6px 18px rgba(16,42,67,.05); }}
+        .yv-critical {{ background: rgba(255,253,248,0.92); border: 1px solid {BRAND_BORDER}; border-left: 7px solid #C6A96A; border-radius: 18px; padding: 14px 15px; margin-bottom: 12px; }}
         .yv-critical h3 {{ font-size: 16px; margin: 0 0 8px 0; color: {BRAND_BLUE}; }}
-        .yv-text {{ color: rgba(0,0,0,.82); font-size: 16px; line-height: 1.45; white-space: pre-wrap; }}
-        .yv-list {{ margin: 0; padding-left: 1.15rem; color: rgba(0,0,0,.82); font-size: 16px; line-height: 1.45; }}
+        .yv-text {{ color: rgba(40,32,24,.86); font-size: 16px; line-height: 1.45; white-space: pre-wrap; }}
+        .yv-list {{ margin: 0; padding-left: 1.15rem; color: rgba(40,32,24,.86); font-size: 16px; line-height: 1.45; }}
         .yv-list li {{ margin-bottom: 5px; }}
         .yv-item-title {{ color: {BRAND_BLUE}; font-size: 28px; font-weight: 900; line-height: 1.08; margin-bottom: 4px; }}
-        .yv-item-meta {{ color: rgba(14,42,71,.68); font-size: 13px; }}
+        .yv-item-meta {{ color: rgba(110,78,46,.78); font-size: 13px; }}
         .kpi-grid {{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }}
-        .kpi {{ background: rgba(255,255,255,.58); border: 1px solid {BRAND_BORDER}; border-radius: 16px; padding: 11px 12px; }}
-        .kpi-label {{ color: rgba(14,42,71,.62); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
+        .kpi {{ background: rgba(255,255,255,.62); border: 1px solid {BRAND_BORDER}; border-radius: 16px; padding: 11px 12px; }}
+        .kpi-label {{ color: rgba(110,78,46,.66); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }}
         .kpi-value {{ color: {BRAND_BLUE}; font-size: 17px; font-weight: 900; margin-top: 4px; }}
-        .pill {{ display:inline-block; padding: 6px 11px; border-radius: 999px; font-size: 12px; font-weight: 850; border: 1px solid {BRAND_BORDER}; background: rgba(255,255,255,.68); color: {BRAND_BLUE}; margin: 4px 4px 0 0; }}
+        .pill {{ display:inline-block; padding: 6px 11px; border-radius: 999px; font-size: 12px; font-weight: 850; border: 1px solid {BRAND_BORDER}; background: rgba(255,253,248,.72); color: {BRAND_BLUE}; margin: 4px 4px 0 0; }}
         .area-title {{ font-size: 15px; font-weight: 900; color: {BRAND_BLUE}; margin-bottom: 7px; }}
-        .stButton > button {{ border-radius: 16px !important; min-height: 2.8rem !important; font-weight: 800 !important; }}
+        .stButton > button {{ border-radius: 16px !important; min-height: 2.8rem !important; font-weight: 800 !important; border-color: {BRAND_BORDER} !important; }}
+        .stButton > button[kind="primary"] {{ background: {BRAND_BLUE} !important; color: #fff !important; }}
         .stTextInput input, .stTextArea textarea {{ border-radius: 14px !important; }}
         div[data-baseweb="select"] > div {{ border-radius: 14px !important; }}
         @media (max-width: 760px) {{ .main .block-container {{ padding-left: .8rem; padding-right: .8rem; max-width: 100%; }} .yv-header {{ align-items: flex-start; }} .yv-title {{ font-size: 19px; }} .yv-user {{ display: none; }} .kpi-grid {{ grid-template-columns: 1fr; }} .yv-item-title {{ font-size: 23px; }} .yv-text, .yv-list {{ font-size: 15px; }} }}
